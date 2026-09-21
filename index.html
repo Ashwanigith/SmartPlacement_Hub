@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartPlacement_Hub — Training & Placement Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0f19;
+      color: #e2e8f0;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- Navigation Bar -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+          <i class="fa-solid fa-graduation-cap text-lg"></i>
+        </div>
+        <div>
+          <span class="text-lg font-bold text-white tracking-wide">SmartPlacement<span class="text-indigo-400">_Hub</span></span>
+          <span class="block text-[11px] text-slate-400 tracking-wider">CAMPUS RECRUITMENT & AUDIT PORTAL</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> SQLite Backend Connected
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+
+    <!-- KPI Metric Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Registered Students</p>
+            <h3 id="metric-total-students" class="text-2xl font-bold text-white mt-1">0</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 text-lg">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Partner Companies</p>
+            <h3 id="metric-total-companies" class="text-2xl font-bold text-white mt-1">0</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 text-lg">
+            <i class="fa-solid fa-building"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Students Placed</p>
+            <h3 id="metric-placed" class="text-2xl font-bold text-emerald-400 mt-1">0</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 text-lg">
+            <i class="fa-solid fa-award"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Placement Rate</p>
+            <h3 id="metric-rate" class="text-2xl font-bold text-indigo-400 mt-1">0%</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-violet-500/10 text-violet-400 text-lg">
+            <i class="fa-solid fa-chart-pie"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions & Data Entry Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- Form 1: Student Registration -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm">
+        <h2 class="text-base font-bold text-white flex items-center gap-2 mb-4">
+          <i class="fa-solid fa-user-plus text-indigo-400"></i> Register Student (SQLite DB)
+        </h2>
+        <form id="form-student" onsubmit="addStudent(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Student ID / Roll No</label>
+              <input type="number" id="stu-id" required placeholder="e.g. 101" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Student Name</label>
+              <input type="text" id="stu-name" required placeholder="e.g. Aman Sharma" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Academic Branch</label>
+              <select id="stu-branch" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                <option value="CSE">Computer Science (CSE)</option>
+                <option value="IT">Information Tech (IT)</option>
+                <option value="ECE">Electronics (ECE)</option>
+                <option value="MECH">Mechanical (MECH)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Cumulative CGPA</label>
+              <input type="number" step="0.01" min="0" max="10" id="stu-cgpa" required placeholder="e.g. 8.45" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+            </div>
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-plus text-xs"></i> Save Student to Database
+          </button>
+        </form>
+      </div>
+
+      <!-- Form 2: Hiring Company Listing -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm">
+        <h2 class="text-base font-bold text-white flex items-center gap-2 mb-4">
+          <i class="fa-solid fa-briefcase text-cyan-400"></i> Add Hiring Company
+        </h2>
+        <form id="form-company" onsubmit="addCompany(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-400 mb-1">Company Name</label>
+            <input type="text" id="comp-name" required placeholder="e.g. Google, TCS, Microsoft" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-cyan-500">
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Min CGPA Cutoff</label>
+              <input type="number" step="0.01" min="0" max="10" id="comp-cgpa" required placeholder="e.g. 7.5" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-cyan-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Package CTC (LPA in ₹)</label>
+              <input type="number" step="0.5" min="1" id="comp-lpa" required placeholder="e.g. 14.5" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-cyan-500">
+            </div>
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-sm transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-plus text-xs"></i> Register Company Drive
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Eligibility Matching Engine & Offer Dispatch -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-bolt text-amber-400"></i> Automated Eligibility Engine
+          </h2>
+          <p class="text-xs text-slate-400">Filter unplaced candidates who fulfill the company cutoff & assign offers.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="text-xs text-slate-400 whitespace-nowrap">Select Drive:</label>
+          <select id="select-company-filter" onchange="renderEligibleCandidates()" class="bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-950/80 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+            <tr>
+              <th class="py-3 px-4">Student ID</th>
+              <th class="py-3 px-4">Candidate Name</th>
+              <th class="py-3 px-4">Branch</th>
+              <th class="py-3 px-4">CGPA</th>
+              <th class="py-3 px-4">Status</th>
+              <th class="py-3 px-4 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="eligible-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Audit Ledger / All Placements Log -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-check text-emerald-400"></i> Placement Audit Records (SQL Relational Join)
+          </h2>
+          <p class="text-xs text-slate-400">Official log of fulfilled job offers stored in SQLite database.</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-950/80 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+            <tr>
+              <th class="py-3 px-4">Record ID</th>
+              <th class="py-3 px-4">Student Name</th>
+              <th class="py-3 px-4">Branch</th>
+              <th class="py-3 px-4">Hired By</th>
+              <th class="py-3 px-4">Package (LPA)</th>
+              <th class="py-3 px-4">Date</th>
+            </tr>
+          </thead>
+          <tbody id="audit-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Frontend Logic connected to Java Server APIs -->
+  <script>
+    const API_BASE = "http://localhost:8080/api";
+
+    let students = [];
+    let companies = [];
+    let auditLog = [];
+
+    // 1. Fetch initial data from SQLite via Java Server
+    async function loadAllData() {
+      try {
+        const [resStu, resComp, resAudit] = await Promise.all([
+          fetch(`${API_BASE}/students`).then(r => r.json()),
+          fetch(`${API_BASE}/companies`).then(r => r.json()),
+          fetch(`${API_BASE}/audits`).then(r => r.json())
+        ]);
+
+        students = resStu;
+        companies = resComp;
+        auditLog = resAudit;
+
+        updateMetrics();
+        populateCompanyDropdown();
+        renderEligibleCandidates();
+        renderAuditLog();
+      } catch (err) {
+        console.error("Backend Server is not reachable. Ensure BackendServer is running on port 8080.", err);
+      }
+    }
+
+    // 2. Metrics Update
+    function updateMetrics() {
+      document.getElementById('metric-total-students').innerText = students.length;
+      document.getElementById('metric-total-companies').innerText = companies.length;
+      const placedCount = students.filter(s => s.status === 'PLACED').length;
+      document.getElementById('metric-placed').innerText = placedCount;
+      const rate = students.length > 0 ? Math.round((placedCount / students.length) * 100) : 0;
+      document.getElementById('metric-rate').innerText = `${rate}%`;
+    }
+
+    // 3. Add Student to SQLite Database
+    async function addStudent(e) {
+      e.preventDefault();
+      const payload = {
+        id: parseInt(document.getElementById('stu-id').value),
+        name: document.getElementById('stu-name').value.trim(),
+        branch: document.getElementById('stu-branch').value,
+        cgpa: parseFloat(document.getElementById('stu-cgpa').value)
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/students`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          document.getElementById('form-student').reset();
+          await loadAllData();
+        } else {
+          alert("Student ID already exists in Database!");
+        }
+      } catch (err) {
+        alert("Backend server offline!");
+      }
+    }
+
+    // 4. Add Company to SQLite Database
+    async function addCompany(e) {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('comp-name').value.trim(),
+        minCgpa: parseFloat(document.getElementById('comp-cgpa').value),
+        packageLpa: parseFloat(document.getElementById('comp-lpa').value)
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/companies`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          document.getElementById('form-company').reset();
+          await loadAllData();
+        }
+      } catch (err) {
+        alert("Backend server offline!");
+      }
+    }
+
+    // 5. Populate Dropdown
+    function populateCompanyDropdown() {
+      const select = document.getElementById('select-company-filter');
+      const currentSelected = select.value;
+      select.innerHTML = '';
+      if (companies.length === 0) {
+        select.innerHTML = '<option value="">No Companies in Database</option>';
+        return;
+      }
+      companies.forEach(c => {
+        select.innerHTML += `<option value="${c.id}">${c.name} (Min CGPA: ${c.minCgpa}, ₹${c.packageLpa} LPA)</option>`;
+      });
+      if (currentSelected) select.value = currentSelected;
+    }
+
+    // 6. Render Eligible Candidates
+    function renderEligibleCandidates() {
+      const select = document.getElementById('select-company-filter');
+      const companyId = parseInt(select.value);
+      const tbody = document.getElementById('eligible-table-body');
+      tbody.innerHTML = '';
+
+      const comp = companies.find(c => c.id === companyId);
+      if (!comp) {
+        tbody.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-slate-500">Add or select a company drive above.</td></tr>';
+        return;
+      }
+
+      const eligible = students.filter(s => s.cgpa >= comp.minCgpa && s.status === 'UNPLACED');
+
+      if (eligible.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-slate-500">No unplaced candidates meet this cutoff bar.</td></tr>';
+        return;
+      }
+
+      eligible.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-mono text-indigo-400">#${s.id}</td>
+          <td class="py-3 px-4 font-semibold text-white">${s.name}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-md text-[11px] bg-slate-800 text-slate-300 font-mono">${s.branch}</span></td>
+          <td class="py-3 px-4 font-semibold text-emerald-400">${s.cgpa.toFixed(2)}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-md text-[11px] bg-amber-500/10 text-amber-400 border border-amber-500/20">${s.status}</span></td>
+          <td class="py-3 px-4 text-right">
+            <button onclick="allocateOffer(${s.id}, ${comp.id})" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition">
+              Dispatch Offer
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 7. Settle Offer (Triggers ACID SQL Transaction in Backend)
+    async function allocateOffer(studentId, companyId) {
+      try {
+        const res = await fetch(`${API_BASE}/offers`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ studentId, companyId })
+        });
+
+        if (res.ok) {
+          await loadAllData();
+        } else {
+          alert("Transaction Failed in Database!");
+        }
+      } catch (err) {
+        alert("Backend server offline!");
+      }
+    }
+
+    // 8. Render Audit Records
+    function renderAuditLog() {
+      const tbody = document.getElementById('audit-table-body');
+      tbody.innerHTML = '';
+
+      if (auditLog.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-slate-500">No placements yet recorded in database audit ledger.</td></tr>';
+        return;
+      }
+
+      auditLog.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-mono text-indigo-400">#REC-${r.recordId}</td>
+          <td class="py-3 px-4 font-semibold text-white">${r.studentName}</td>
+          <td class="py-3 px-4 font-mono text-slate-300">${r.branch}</td>
+          <td class="py-3 px-4 text-cyan-400 font-medium">${r.companyName}</td>
+          <td class="py-3 px-4 font-bold text-emerald-400">₹${r.packageLpa} LPA</td>
+          <td class="py-3 px-4 text-slate-400">${r.date}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Start App & Sync with Database
+    loadAllData();
+  </script>
+</body>
+</html>
